@@ -25,7 +25,7 @@ function App() {
                 value: value,
                 expiration_seconds: 5, // Set your desired expiration time
             });
-            console.log(key,value,response);
+            console.log(key, value, response);
         } catch (error) {
             console.error(error);
         }
@@ -34,7 +34,7 @@ function App() {
     return (
         <div className="App">
             <h1>LRU Cache Demo</h1>
-            <div>
+            <div className='setting'>
                 <input
                     type="text"
                     placeholder="Key"
@@ -47,19 +47,25 @@ function App() {
                     value={value}
                     onChange={(e) => setValue(e.target.value)}
                 />
-                <button onClick={setCacheKey}>Set Key</button>
+                <div>
+                    <button onClick={setCacheKey}>Set Key</button>
+                </div>
             </div>
-            <div>
-                <input
-                    type="text"
-                    placeholder="Get Key"
-                    value={key}
-                    onChange={(e) => setKey(e.target.value)}
-                />
-                <button onClick={fetchCacheValue}>Get Value</button>
-            </div>
-            <div>
-                <p>Cache Value: {cacheValue}</p>
+            <div className='getting'>
+                <div>
+                    <input
+                        type="text"
+                        placeholder="Get Key"
+                        value={key}
+                        onChange={(e) => setKey(e.target.value)}
+                    />
+                    <div>
+                        <button onClick={fetchCacheValue}>Get Value</button>
+                    </div>
+                </div>
+                <div>
+                    <p>Cache Value: {cacheValue}</p>
+                </div>
             </div>
         </div>
     );

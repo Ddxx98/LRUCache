@@ -1,13 +1,11 @@
 package main
 
 import (
-	"net/http"
+	"backend/middleware"
+	"backend/router"
 	"fmt"
-    "backend/router"
-    "backend/middleware"
+	"net/http"
 )
-
-
 
 func main() {
 	r := routers.Router()
