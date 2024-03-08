@@ -5,6 +5,11 @@
   text-align: center;
 }
 
+p{
+  margin: 0;
+  padding: 0;
+}
+
 input {
   margin: 5px;
 }
@@ -32,6 +37,10 @@ input {
 
 .logo.react:hover {
   filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+label {
+  display: block;
 }
 
 @keyframes logo-spin {

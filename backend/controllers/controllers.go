@@ -90,12 +90,13 @@ func SetHandler(w http.ResponseWriter, r *http.Request) {
 	var data struct {
 		Key               string `json:"key"`
 		Value             string `json:"value"`
-		ExpirationSeconds int    `json:"expiration_seconds"`
+		ExpirationSeconds int    `json:"expirationSeconds"`
 	}
 	decoder := json.NewDecoder(r.Body)
-	fmt.Println(r.Body)
+	fmt.Println(r.Body, decoder)
 	if err := decoder.Decode(&data); err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
+		fmt.Println(err)
 		return
 	}
 

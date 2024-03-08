@@ -1,11 +1,19 @@
-import React, { useState } from 'react';
-import './App.css';
-import axios from 'axios'; // Import Axios
+import React, { useState } from "react";
+import "./App.css";
+import axios from "axios"; // Import Axios
 
 function App() {
-    const [key, setKey] = useState('');
-    const [value, setValue] = useState('');
-    const [cacheValue, setCacheValue] = useState('');
+    const [key, setKey] = useState("");
+    const [formData, setFormData] = useState({
+        key: '',
+        value: '',
+        time: ''
+      });
+    const [cacheValue, setCacheValue] = useState("");
+
+    const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+      };
 
     const fetchCacheValue = async () => {
         try {
@@ -14,44 +22,63 @@ function App() {
             console.log(response);
         } catch (error) {
             console.error(error);
-            setCacheValue('Key not found');
+            setCacheValue("Key not found");
         }
     };
 
     const setCacheKey = async () => {
         try {
-            const response = await axios.post('http://localhost:8080/set', {
-                key: key,
-                value: value,
-                expiration_seconds: 5, // Set your desired expiration time
+            const response = await axios.post("http://localhost:8080/set", {
+                key: formData.key,
+                value: formData.value,
+                expirationSeconds: Number(formData.time), // Set your desired expiration time (in seconds)formData.time, // Set your desired expiration time
             });
-            console.log(key, value, response);
+            console.log(formData.key, formData.value, formData.time, response);
         } catch (error) {
             console.error(error);
         }
+        console.log(formData);
     };
 
     return (
         <div className="App">
             <h1>LRU Cache Demo</h1>
-            <div className='setting'>
-                <input
-                    type="text"
-                    placeholder="Key"
-                    value={key}
-                    onChange={(e) => setKey(e.target.value)}
-                />
-                <input
-                    type="text"
-                    placeholder="Value"
-                    value={value}
-                    onChange={(e) => setValue(e.target.value)}
-                />
+            <div className="setting">
+                <label>
+                    <p>Key:</p>
+                    <input
+                        type="text"
+                        name="key"
+                        placeholder="Key"
+                        value={formData.key}
+                        onChange={handleChange}
+                    />
+                </label> 
+                <label>
+                    <p>Value:</p>
+                    <input
+                        type="text"
+                        name="value"
+                        placeholder="Value"
+                        value={formData.value}
+                        onChange={handleChange}
+                    />
+                </label>
+                <label>
+                    <p>Expiration time in seconds :</p>
+                    <input
+                        type="text"
+                        name="time"
+                        placeholder="Time in seconds"
+                        value={formData.time}
+                        onChange={handleChange}
+                    />
+                </label>
                 <div>
                     <button onClick={setCacheKey}>Set Key</button>
                 </div>
             </div>
-            <div className='getting'>
+            <div className="getting">
                 <div>
                     <input
                         type="text"
