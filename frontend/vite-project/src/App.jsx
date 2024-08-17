@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 import axios from "axios"; // Import Axios
 
@@ -15,9 +15,13 @@ function App() {
         setFormData({ ...formData, [e.target.name]: e.target.value });
       };
 
+    // useEffect(() => {
+    //     fetchCacheValue()
+    // },[keydata])
+
     const fetchCacheValue = async () => {
         try {
-            const response = await axios.get(`http://localhost:8080/get?key=${key}`);
+            const response = await (await axios.get(`http://localhost:8080/get?key=${key}`))
             setCacheValue(response.data.value);
             console.log(response);
         } catch (error) {
@@ -34,10 +38,15 @@ function App() {
                 expirationSeconds: Number(formData.time), // Set your desired expiration time (in seconds)formData.time, // Set your desired expiration time
             });
             console.log(formData.key, formData.value, formData.time, response);
+            setFormData({
+                key : '',
+                name : '',
+                time : '',
+              });
         } catch (error) {
             console.error(error);
         }
-        console.log(formData);
+        // console.log(formData);
     };
 
     return (
@@ -75,7 +84,7 @@ function App() {
                     />
                 </label>
                 <div>
-                    <button onClick={setCacheKey}>Set Key</button>
+                    <button onClick={setCacheKey} >Set Key</button>
                 </div>
             </div>
             <div className="getting">

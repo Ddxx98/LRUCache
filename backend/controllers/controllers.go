@@ -86,6 +86,17 @@ func (c *LRUCache) removeElement(e *list.Element) {
 	c.lruList.Remove(e)
 }
 
+func (c *LRUCache) Delete(key string) error {
+	c.mutex.Lock()
+	defer c.mutex.Unlock()
+
+	if elem, ok := c.cache[key]; ok {
+		c.removeElement(elem)
+		return nil
+	}
+	return fmt.Errorf("key %s not found", key)
+}
+
 func SetHandler(w http.ResponseWriter, r *http.Request) {
 	var data struct {
 		Key               string `json:"key"`
@@ -111,12 +122,22 @@ func GetHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Key not found", http.StatusNotFound)
 		return
 	}
-	fmt.Println(key)
 	response := struct {
 		Key   string      `json:"key"`
 		Value interface{} `json:"value"`
 	}{key, value}
+	fmt.Println(response)
 	json.NewEncoder(w).Encode(response)
+}
+
+func DeleteHandler(w http.ResponseWriter, r *http.Request) {
+	key := r.URL.Query().Get("key")
+	val := cache.Delete(key)
+	if val != nil {
+		json.NewEncoder(w).Encode(val)
+	} else {
+		w.WriteHeader(http.StatusOK)
+	}
 }
 
 func Visible(w http.ResponseWriter, r *http.Request) {
